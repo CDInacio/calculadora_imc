@@ -1,10 +1,12 @@
-import 'package:calculadora_imc/providers/hitoric_provider.dart';
 import 'package:calculadora_imc/providers/imc_provider.dart';
+import 'package:calculadora_imc/sqlite/imc_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ResultScreen extends ConsumerWidget {
-  const ResultScreen({super.key});
+  ResultScreen({super.key});
+
+  var imcRepo = ImcRepository();
 
   void _showSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -66,10 +68,12 @@ class ResultScreen extends ConsumerWidget {
             ),
             TextButton(
                 onPressed: () {
-                  ref
-                      .read(historicProvider.notifier)
-                      .addToHistoric(imc: state, result: result);
-                  _showSnackBar(context);
+                  // print(state);
+                  imcRepo.saveToDatabase(state);
+                  // ref
+                  //     .read(historicProvider.notifier)
+                  //     .addToHistoric(imc: state, result: result);
+                  // _showSnackBar(context);
                 },
                 child: const Text(
                   'Salvar resultado',

@@ -8,7 +8,8 @@ var kColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
 );
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
 }
 

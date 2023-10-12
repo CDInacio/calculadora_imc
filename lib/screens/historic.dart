@@ -1,20 +1,41 @@
 import 'package:calculadora_imc/models/historic.dart';
 import 'package:calculadora_imc/providers/hitoric_provider.dart';
 import 'package:calculadora_imc/providers/imc_provider.dart';
+import 'package:calculadora_imc/sqlite/imc_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HistoricScreen extends ConsumerWidget {
+class HistoricScreen extends ConsumerStatefulWidget {
   const HistoricScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HistoricScreen> createState() => _HistoricScreenState();
+}
+
+class _HistoricScreenState extends ConsumerState<HistoricScreen> {
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(imcProvider);
+    final result = (state.weight) / (state.height / 100 * state.height / 100);
     final historic = ref.watch(historicProvider);
 
     void removeItem(Historic item) {
       ref.read(historicProvider.notifier).removeFromHistoric(item);
+    }
+
+    var imcRepo = ImcRepository();
+
+    @override
+    void initState() {
+      super.initState();
+      imcRepo.getIMC().then((value) {
+        for (var element in value) {
+          ref
+              .read(historicProvider.notifier)
+              .addToHistoric(imc: element, result: result);
+        }
+      });
     }
 
     Widget content = Center(

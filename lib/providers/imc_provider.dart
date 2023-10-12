@@ -6,11 +6,13 @@ final initialValue = Imc(gender: '', height: 120, weight: 30);
 class ImcNotifier extends StateNotifier<Imc> {
   ImcNotifier() : super(initialValue);
 
-  void setValue({String? gender, double? height, double? weight}) {
+  void setValue(
+      {String? gender, double? height, double? weight, double? result}) {
     final updatedImc = Imc(
-        gender: gender ?? state.gender,
-        height: height ?? state.height,
-        weight: weight ?? state.weight);
+      gender: gender ?? state.gender,
+      height: height ?? state.height,
+      weight: weight ?? state.weight,
+    );
 
     state = updatedImc;
   }
